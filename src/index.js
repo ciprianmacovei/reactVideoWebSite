@@ -1,15 +1,45 @@
-import React from 'react';
+import React ,{Component} from 'react';
 import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
-import { createStore, applyMiddleware } from 'redux';
+import SearchBox from './components/search-box.js';
+import VideoList from './components/video-list.js';
+import VideoDetails from './components/video-details.js';
+import YTSearch from 'youtube-api-search';
 
-import App from './components/app';
-import reducers from './reducers';
 
-const createStoreWithMiddleware = applyMiddleware()(createStore);
+const api_Youtube_key = "AIzaSyD0d3JIi6fA65PuVdO86jRex9AGOwJrjq0";
 
-ReactDOM.render(
-  <Provider store={createStoreWithMiddleware(reducers)}>
-    <App />
-  </Provider>
-  , document.querySelector('.container'));
+
+
+
+
+
+
+
+class App extends Component {
+	
+
+	constructor(props){
+		super(props);
+
+		this.state = { videos: []}
+
+		YTSearch({key:api_Youtube_key,term:'dorian popa'}, (videos) => {
+		this.setState({videos});
+		})
+
+	}
+
+	render(){
+
+		return ( 
+				<div>
+					<div>Hi!</div>
+					<SearchBox />
+					<VideoDetails video={this.state.videos[0]}/>
+					<VideoList videos={this.state.videos}/>
+				</div> 
+				);
+	}
+}	
+
+ReactDOM.render(<App />,document.querySelector(".container"))
